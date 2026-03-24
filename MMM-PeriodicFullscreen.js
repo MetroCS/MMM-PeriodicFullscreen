@@ -18,11 +18,16 @@ Module.register("MMM-PeriodicFullscreen", {
 
     socketNotificationReceived(notification, payload) {
 	if (notification === "IMAGES_LIST") {
-	    this.images = payload;
+	    // Fisher-Yates shuffle
+	    const files = payload;
+	    for (let i = files.length - 1; i > 0; i--) {
+		const j = Math.floor(Math.random() * (i + 1));
+		[files[i], files[j]] = [files[j], files[i]];
+	    }
+	    this.images = files;
 	    if (this.images.length > 0) {
 		this.showFullscreen();
 	    } else {
-		// No images found — skip this cycle and try again next interval
 		setTimeout(() => this.requestAndShow(), this.config.intervalMinutes * 60 * 1000);
 	    }
 	}
@@ -63,7 +68,7 @@ Module.register("MMM-PeriodicFullscreen", {
     `;
 
     const img = document.createElement("img");
-    img.src = this.config.imagePath + this.images[this.currentImage];
+    img.src = this.config.imagePath + this.images[0];
     img.style.cssText = "width:100%; height:100%; object-fit:cover;";
     wrapper.appendChild(img);
     return wrapper;
