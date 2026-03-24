@@ -1,0 +1,6 @@
+# Actual image files
+images/*.jpg
+images/*.gif
+images/*.jpeg
+images/*.png
+images/*.pdf
